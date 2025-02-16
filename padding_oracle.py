@@ -16,6 +16,12 @@ import requests
 s = requests.session()
 
 
+def xor_bytes(a: bytes, b: bytes) -> bytes:
+    """ XOR two byte sequences """
+    return bytes(x ^ y for x, y in zip(a, b))
+
+
+
 def oracle(url: str, messages: List[bytes]) -> List[Dict[str, str]]:
     while True:
         try:
