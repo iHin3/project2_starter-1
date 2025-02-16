@@ -50,6 +50,32 @@ def main():
     # TODO: Decrypt the message
     #
 
+    altered_message = message.copy()
+    plaintext = message.copy()
+    # eventually add a loop here to decrypt all blocks
+    block_size = 16
+    padding = [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10]
+    
+    # change variables and numbers to account for new loop
+    for block_num in range(1, block_size):     # loop through all blocks
+        # get the second to last 16 byte block
+        cipher_text_block = message[-(2 * block_size):-block_size]
+        current_byte = cipher_text_block[-1]        # change 1 to the loop variable later
+        current_byte_index = message[-block_size - 1]
+
+        # check different values in 256 bit range until correct one is found
+        for i in range(256):
+            altered_message[current_byte_index] = i
+            response = oracle(oracle_url, altered_message)
+            if response == "invalid_mac":       # if mac error, padding is correct so break
+                break
+            else
+                continue
+
+        int_state = altered_message[current_byte_index] ^ padding[block_num + 1]   
+        plaintext_byte = message[current_byte_index] ^ int_state
+        plaintext[current_byte_index] = plaintext_byte
+
     decrypted = "TODO"
     print(decrypted)
 
